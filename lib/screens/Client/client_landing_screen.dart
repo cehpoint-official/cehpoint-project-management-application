@@ -1,3 +1,4 @@
+import 'package:cehpoint_project_management/screens/Client/rate_our_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,41 +23,50 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
             children: [
               // AppBar
               Container(
-                height: AppBar().preferredSize.height,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width - 20,
+                height: MediaQuery.of(context).size.height * 0.1,
+                padding: const EdgeInsets.all(5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                        ),
-                      ),
+                    Image.asset(
+                      "assets/logo sec 17.png",
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.15,
                     ),
-                    Expanded(
-                      child: Text(
-                        "ADD PROJECT",
-                        textAlign: TextAlign.center,
-                        textDirection: TextDirection.ltr,
-                        style: GoogleFonts.inter(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.50,
+
+                     child:Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                       children:  [
+                       Image.asset(
+                         "assets/Vector.png",
+                         height: 20,
+                         width: 40,
+                       ),
+                       const Icon(Icons.call,
+                         color: Colors.blue,),
+                       const Text("CALL US",style: TextStyle(
+                         fontSize: 10,
+                         fontWeight: FontWeight.w700,
+                       ),),
+                       const Icon(Icons.whatsapp,
+                         color: Colors.green,),
+                       Text("HELP",style: TextStyle(
+                         fontSize: 10,
+                         fontWeight: FontWeight.w700,),),
+
+                     ],),
+                   
+                      
+
                     ),
-                    const SizedBox(width: 40),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+
 
               //My Project with color background
               Container(
@@ -297,15 +307,16 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
                                             Icon(
                                               Icons.link,
                                               size: 30,
-                                              color: Color(0xff999999),
+                                              color: Colors.blue,
                                             ),
                                             SizedBox(
                                               width: 13,
                                             ),
                                             SizedBox(
                                               child: Text(
-                                                "Update Report",
+                                                "View Report",
                                                 style: TextStyle(
+                                                  color: Colors.blue,
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 16,
                                                 ),
@@ -349,7 +360,7 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
                                           width: 13,
                                         ),
                                         Text(
-                                          'VIEW FEEDBACK',
+                                          'Submit Feedback',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 17.0,
@@ -373,6 +384,19 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
             ],
           ),
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(() => const RateOurService());
+
+        },
+        backgroundColor: const Color(0xff66CA43),
+        label: const Text("RATE OUR SERVICE",style: TextStyle(fontWeight: FontWeight.w700),),
+        icon: const Icon(Icons.star,color: Color(0xffFFE555),),
+        // child: const Icon(Icons.navigation),
+
+
       ),
     );
   }

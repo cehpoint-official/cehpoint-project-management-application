@@ -1,5 +1,8 @@
 import 'package:cehpoint_project_management/Controllers/authenticationController.dart';
 import 'package:cehpoint_project_management/screens/Authentication/login_screen.dart';
+import 'package:cehpoint_project_management/screens/Client/client_landing_screen.dart';
+import 'package:cehpoint_project_management/screens/Client/feedback.dart';
+import 'package:cehpoint_project_management/screens/Client/rate_our_service.dart';
 import 'package:cehpoint_project_management/screens/ProjectManager/add_project.dart';
 import 'package:cehpoint_project_management/screens/ProjectManager/add_report.dart';
 import 'package:cehpoint_project_management/screens/ProjectManager/project_manager_landing_screen.dart';
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      home: const ClientLandingScreen(),
     );
   }
 }
