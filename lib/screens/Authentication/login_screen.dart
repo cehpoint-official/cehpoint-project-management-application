@@ -1,6 +1,5 @@
 import 'package:cehpoint_project_management/screens/Authentication/Client/client_login.dart';
 import 'package:cehpoint_project_management/screens/Authentication/ProjectManager/login_project_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage("assets/logo sec 17.png"),
+                  image: AssetImage("assets/mobile.png"),
                 )),
               ),
               const SizedBox(height: 90),
@@ -53,21 +52,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(width: 10),
-                      const SizedBox(
-                        height: 28,
-                        width: 28,
-                        child: Icon(
-                          Icons.manage_accounts,
-                          size: 28,
-                        ),
+                      const Icon(
+                        Icons.manage_accounts,
+                        size: 28,
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                        'Log-in as Project Manager',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                          color: Colors.black,
+                      Expanded(
+                        child: Text(
+                          'Log-in as Project Manager',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],

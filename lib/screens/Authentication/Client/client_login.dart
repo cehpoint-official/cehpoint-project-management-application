@@ -1,7 +1,4 @@
-import 'package:cehpoint_project_management/screens/Authentication/login_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,7 +15,7 @@ class _ClientLoginState extends State<ClientLogin> {
   AuthenticationController authenticationController = Get.find();
 
   final secretKey = GlobalKey<FormState>();
-
+  var hidePass = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +34,7 @@ class _ClientLoginState extends State<ClientLogin> {
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage("assets/logo sec 17.png"),
+                      image: AssetImage("assets/mobile.png"),
                     ),
                   ),
                 ),
@@ -63,6 +60,7 @@ class _ClientLoginState extends State<ClientLogin> {
                               if (value!.isEmpty) {
                                 return "Please Enter Your Username";
                               }
+                              return null;
                             },
                             controller: authenticationController.clientUserName,
                             keyboardType: TextInputType.text,
@@ -101,33 +99,37 @@ class _ClientLoginState extends State<ClientLogin> {
                               if (value!.isEmpty) {
                                 return "Please Enter Your Password";
                               }
+                              return null;
                             },
                             controller: authenticationController.clientPassword,
-                            keyboardType: TextInputType.number,
-                            obscureText: true,
+                            keyboardType: TextInputType.text,
+                            obscureText: hidePass,
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
-                            decoration: const InputDecoration(
-                              suffixIcon: Icon(
-                                Icons.remove_red_eye,
-                              ),
-                              suffixIconColor: Colors.red,
-                              enabledBorder: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              suffix: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      hidePass = !hidePass;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.remove_red_eye)),
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   width: 1,
                                   color: Color(0xff999999),
                                 ),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   width: 1,
                                   color: Colors.black,
                                 ),
                               ),
                               hintText: "Password",
-                              hintStyle: TextStyle(
+                              hintStyle: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.normal,
                                 color: Color(0xff999999),
@@ -142,7 +144,7 @@ class _ClientLoginState extends State<ClientLogin> {
                   onTap: () {
                     secretKey.currentState!.validate();
                     if (secretKey.currentState!.validate()) {
-                      authenticationController.loginClient();
+                      authenticationController.loginClient(context);
                     }
                   },
                   child: Container(

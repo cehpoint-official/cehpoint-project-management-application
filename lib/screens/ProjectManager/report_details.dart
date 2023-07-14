@@ -1,25 +1,36 @@
-import 'package:cehpoint_project_management/screens/ProjectManager/weekly_feedback.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 class ReportDetails extends StatefulWidget {
-  const ReportDetails({Key? key}) : super(key: key);
-
+  const ReportDetails({Key? key, required this.clientProjectName, this.val})
+      : super(key: key);
+  final String clientProjectName;
+  final int? val;
   @override
   State<ReportDetails> createState() => _ReportDetailsState();
 }
 
 class _ReportDetailsState extends State<ReportDetails> {
-  var _value = "-1";
+  TextEditingController reportLinkController = TextEditingController();
+  String? link = '';
+  String? weekNo = '';
+
+  @override
+  void dispose() {
+    reportLinkController.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // final value = '-1';
+    final value = widget.val == null ? "-1" : '${widget.val}';
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -37,7 +48,7 @@ class _ReportDetailsState extends State<ReportDetails> {
                         width: 40,
                         child: IconButton(
                           onPressed: () {
-                            Get.back();
+                            Navigator.pop(context);
                           },
                           icon: const Icon(
                             Icons.arrow_back,
@@ -62,59 +73,61 @@ class _ReportDetailsState extends State<ReportDetails> {
                 ),
                 const SizedBox(height: 130),
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      Container(
-                        child: DropdownButtonFormField(
-                          dropdownColor: Colors.white,
-                          isExpanded: false,
-                          value: _value,
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text(
-                                "Add week",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xff7F7F7F)),
-                              ),
-                              value: "-1",
+                      DropdownButtonFormField(
+                        dropdownColor: Colors.white,
+                        isExpanded: false,
+                        value: value,
+                        items: const [
+                          DropdownMenuItem(
+                            value: "-1",
+                            child: Text(
+                              "Add week",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xff7F7F7F)),
                             ),
-                            DropdownMenuItem(
-                              child: Text("Week 1"),
-                              value: "1",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Week 2"),
-                              value: "2",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Week 3"),
-                              value: "3",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Week 4"),
-                              value: "4",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Week 5"),
-                              value: "5",
-                            ),
-                          ],
-                          onChanged: (v) {},
-                        ),
+                          ),
+                          DropdownMenuItem(
+                            value: "1",
+                            child: Text("Week 1"),
+                          ),
+                          DropdownMenuItem(
+                            value: "2",
+                            child: Text("Week 2"),
+                          ),
+                          DropdownMenuItem(
+                            value: "3",
+                            child: Text("Week 3"),
+                          ),
+                          DropdownMenuItem(
+                            value: "4",
+                            child: Text("Week 4"),
+                          ),
+                          DropdownMenuItem(
+                            value: "5",
+                            child: Text("Week 5"),
+                          ),
+                        ],
+                        onChanged: (v) {
+                          weekNo = v;
+                        },
                       ),
                       const SizedBox(height: 30),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: const TextField(
-                          style:  TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xff7F7F7F)),
-                          decoration: InputDecoration(
-                            hintText: "Add Reort link",
+                        child: TextField(
+                          onChanged: (value) => link = value,
+                          controller: reportLinkController,
+                          style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xff7F7F7F)),
+                          decoration: const InputDecoration(
+                            hintText: "Add Report link",
                             hintStyle: TextStyle(
                               color: Color(0xff999999),
                             ),
@@ -123,8 +136,22 @@ class _ReportDetailsState extends State<ReportDetails> {
                       ),
                       const SizedBox(height: 300),
                       InkWell(
-                        onTap: () {
-                          Get.to(() => const WeeklyFeedback());
+                        onTap: () async {
+                          if (!reportLinkController.text.contains('https://')) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Invalid link')));
+                            return;
+                          }
+
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Report Saved')));
+                          Navigator.pop(context);
+                          await FirebaseFirestore.instance
+                              .collection('projects')
+                              .doc(widget.clientProjectName)
+                              .update({'week-$weekNo': link});
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -135,10 +162,10 @@ class _ReportDetailsState extends State<ReportDetails> {
                           ),
                           padding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 10),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.add,
                                 size: 30,

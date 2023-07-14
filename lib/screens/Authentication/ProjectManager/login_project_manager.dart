@@ -1,6 +1,4 @@
 import 'package:cehpoint_project_management/Controllers/authenticationController.dart';
-import 'package:cehpoint_project_management/screens/Authentication/login_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,7 +15,7 @@ class _LoginProjectManagerState extends State<LoginProjectManager> {
   AuthenticationController authenticationController = Get.find();
 
   final secretKey = GlobalKey<FormState>();
-
+  var hidePass = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +34,7 @@ class _LoginProjectManagerState extends State<LoginProjectManager> {
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage("assets/logo sec 17.png"),
+                      image: AssetImage("assets/mobile.png"),
                     ),
                   ),
                 ),
@@ -68,6 +66,7 @@ class _LoginProjectManagerState extends State<LoginProjectManager> {
                         if (value!.isEmpty) {
                           return "Please Enter Secret Code";
                         }
+                        return null;
                       },
                       maxLength: 4,
                       maxLines: 1,
@@ -75,28 +74,34 @@ class _LoginProjectManagerState extends State<LoginProjectManager> {
                       controller:
                           authenticationController.projectManagerSecretCode,
                       keyboardType: TextInputType.number,
-                      obscureText: true,
+                      obscureText: hidePass,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 10,
                       ),
-                      decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.remove_red_eye),
-                        enabledBorder: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        suffix: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                hidePass = !hidePass;
+                              });
+                            },
+                            icon: const Icon(Icons.remove_red_eye)),
+                        enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             width: 1,
                             color: Color(0xff999999),
                           ),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             width: 1,
                             color: Colors.black,
                           ),
                         ),
                         hintText: ". . . .",
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           fontSize: 30,
                           color: Color(0xff999999),
                         ),
@@ -108,7 +113,7 @@ class _LoginProjectManagerState extends State<LoginProjectManager> {
                 InkWell(
                   onTap: () {
                     secretKey.currentState!.validate();
-                    if(secretKey.currentState!.validate()){
+                    if (secretKey.currentState!.validate()) {
                       authenticationController.loginProjectManager();
                     }
                   },
