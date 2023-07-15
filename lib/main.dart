@@ -1,18 +1,23 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cehpoint_project_management/Controllers/authenticationController.dart';
+import 'package:cehpoint_project_management/Controllers/project_list.dart';
 import 'package:cehpoint_project_management/screens/Authentication/login_screen.dart';
-import 'package:cehpoint_project_management/screens/Client/client_landing_screen.dart';
-import 'package:cehpoint_project_management/screens/Client/feedback.dart';
-import 'package:cehpoint_project_management/screens/Client/rate_our_service.dart';
-import 'package:cehpoint_project_management/screens/ProjectManager/add_project.dart';
-import 'package:cehpoint_project_management/screens/ProjectManager/add_report.dart';
-import 'package:cehpoint_project_management/screens/ProjectManager/project_manager_landing_screen.dart';
-import 'package:cehpoint_project_management/screens/ProjectManager/report_details.dart';
-import 'package:cehpoint_project_management/screens/ProjectManager/weekly_feedback.dart';
-import 'package:cehpoint_project_management/splash_screen.dart';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
+  await ProjectNamesList.getList();
+  await UsernameList.getList();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ClientLandingScreen(),
+      home: const LoginScreen(),
     );
   }
 }
