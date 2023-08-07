@@ -12,10 +12,25 @@ class AuthenticationController extends GetxController {
   TextEditingController clientUserName = TextEditingController();
   TextEditingController clientPassword = TextEditingController();
 
-  loginProjectManager() {
-    if (projectManagerSecretCode.text == "1234") {
-      projectManagerSecretCode.clear();
-      Get.offAll(() => const ProjectManagerLandingScreen());
+  loginProjectManager(BuildContext context) async {
+    final passData = await FirebaseFirestore.instance
+        .collection('project-manager')
+        .doc('password')
+        .get();
+    print(passData['code']);
+    try {
+      if (projectManagerSecretCode.text == passData['code'].toString()) {
+        projectManagerSecretCode.clear();
+        Get.offAll(() => const ProjectManagerLandingScreen());
+      } else {
+        throw Exception('Invalid Credentials');
+      }
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Invalid Credentials')));
+      }
     }
   }
 
