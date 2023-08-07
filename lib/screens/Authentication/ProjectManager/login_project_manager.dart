@@ -114,7 +114,7 @@ class _LoginProjectManagerState extends State<LoginProjectManager> {
                   onTap: () {
                     secretKey.currentState!.validate();
                     if (secretKey.currentState!.validate()) {
-                      authenticationController.loginProjectManager();
+                      authenticationController.loginProjectManager(context);
                     }
                   },
                   child: Container(
